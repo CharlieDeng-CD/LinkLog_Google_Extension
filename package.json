@@ -1,0 +1,43 @@
+{
+  "name": "linklog",
+  "displayName": "LinkLog",
+  "version": "0.1.0",
+  "description": "AI Knowledge Graph Browser — select any concept and explore its prerequisites through an interactive knowledge graph.",
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "package": "plasmo package"
+  },
+  "dependencies": {
+    "@plasmohq/messaging": "0.6.2",
+    "@plasmohq/storage": "1.12.0",
+    "cytoscape": "^3.30.0",
+    "cytoscape-fcose": "^2.2.0",
+    "openai": "^4.73.0",
+    "plasmo": "0.90.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@plasmohq/prettier-plugin-sort-imports": "4.0.1",
+    "@playwright/test": "^1.61.0",
+    "@types/chrome": "0.0.287",
+    "@types/cytoscape": "^3.21.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "playwright": "^1.61.0",
+    "prettier": "3.3.3",
+    "typescript": "5.6.3"
+  },
+  "manifest": {
+    "host_permissions": [
+      "https://*/*",
+      "http://*/*"
+    ],
+    "permissions": [
+      "activeTab",
+      "storage",
+      "scripting"
+    ]
+  }
+}
