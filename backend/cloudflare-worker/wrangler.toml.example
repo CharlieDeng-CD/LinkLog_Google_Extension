@@ -1,0 +1,12 @@
+name = "linklog-api"
+main = "worker.js"
+compatibility_date = "2026-06-19"
+
+# Optional: bind a KV namespace for simple per-IP hourly rate limiting.
+# [[kv_namespaces]]
+# binding = "LINKLOG_RATE_LIMIT_KV"
+# id = "your-kv-namespace-id"
+
+[vars]
+LINKLOG_HOURLY_LIMIT = "60"
+

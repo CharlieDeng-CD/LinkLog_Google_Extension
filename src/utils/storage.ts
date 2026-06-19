@@ -1,4 +1,4 @@
-import type { GraphData, LocalData } from "~types"
+import type { DailyStats, GraphData, LearningSummary, LocalData } from "~types"
 
 const STORAGE_KEYS = {
   API_KEY: "apiKey",
@@ -11,6 +11,10 @@ const STORAGE_KEYS = {
   STREAM_BUFFER: "streamBuffer"
 } as const
 
+const DEFAULT_API_BASE_URL =
+  process.env.PLASMO_PUBLIC_LINKLOG_API_BASE_URL ||
+  "https://api.deepseek.com"
+
 export async function getApiKey(): Promise<string> {
   const result = await chrome.storage.local.get(STORAGE_KEYS.API_KEY)
   return result[STORAGE_KEYS.API_KEY] || ""
@@ -22,7 +26,7 @@ export async function setApiKey(key: string): Promise<void> {
 
 export async function getApiBaseUrl(): Promise<string> {
   const result = await chrome.storage.local.get(STORAGE_KEYS.API_BASE_URL)
-  return result[STORAGE_KEYS.API_BASE_URL] || "https://api.deepseek.com"
+  return result[STORAGE_KEYS.API_BASE_URL] || DEFAULT_API_BASE_URL
 }
 
 export async function setApiBaseUrl(url: string): Promise<void> {
@@ -34,12 +38,14 @@ export async function getKnownNodes(): Promise<string[]> {
   return result[STORAGE_KEYS.KNOWN_NODES] || []
 }
 
-export async function addKnownNode(label: string): Promise<void> {
+export async function addKnownNode(label: string): Promise<boolean> {
   const known = await getKnownNodes()
   if (!known.includes(label)) {
     known.push(label)
     await chrome.storage.local.set({ [STORAGE_KEYS.KNOWN_NODES]: known })
+    return true
   }
+  return false
 }
 
 export async function removeKnownNode(label: string): Promise<void> {
@@ -59,6 +65,42 @@ export async function getGraph(key: string): Promise<GraphData | null> {
   const result = await chrome.storage.local.get(STORAGE_KEYS.EXPLORED_GRAPHS)
   const graphs = result[STORAGE_KEYS.EXPLORED_GRAPHS] || {}
   return graphs[key] || null
+}
+
+export async function getExploredGraphs(): Promise<Record<string, GraphData>> {
+  const result = await chrome.storage.local.get(STORAGE_KEYS.EXPLORED_GRAPHS)
+  return result[STORAGE_KEYS.EXPLORED_GRAPHS] || {}
+}
+
+export async function getDailyStats(): Promise<Record<string, DailyStats>> {
+  const result = await chrome.storage.local.get(STORAGE_KEYS.DAILY_STATS)
+  return result[STORAGE_KEYS.DAILY_STATS] || {}
+}
+
+export async function getStreak(): Promise<number> {
+  const result = await chrome.storage.local.get(STORAGE_KEYS.STREAK)
+  return result[STORAGE_KEYS.STREAK] || 0
+}
+
+export async function getLearningSummary(): Promise<LearningSummary> {
+  const todayKey = new Date().toISOString().split("T")[0]
+  const [knownNodes, graphs, dailyStats, streak] = await Promise.all([
+    getKnownNodes(),
+    getExploredGraphs(),
+    getDailyStats(),
+    getStreak()
+  ])
+  const recentGraphs = Object.values(graphs)
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .slice(0, 5)
+
+  return {
+    knownCount: knownNodes.length,
+    exploredCount: Object.keys(graphs).length,
+    streak,
+    today: dailyStats[todayKey] || { explored: 0, mastered: 0 },
+    recentGraphs
+  }
 }
 
 export async function updateDailyStats(

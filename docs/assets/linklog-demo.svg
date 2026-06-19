@@ -1,0 +1,40 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="720" rx="34" fill="#F7F3EA"/>
+  <rect x="50" y="48" width="1100" height="624" rx="26" fill="#FFFFFF" stroke="#DFD5C6" stroke-width="2"/>
+  <rect x="50" y="48" width="1100" height="78" rx="26" fill="#EFF3EE"/>
+  <circle cx="91" cy="87" r="10" fill="#E86F58"/>
+  <circle cx="122" cy="87" r="10" fill="#E6B84F"/>
+  <circle cx="153" cy="87" r="10" fill="#65B96A"/>
+  <rect x="203" y="71" width="470" height="32" rx="16" fill="#FFFFFF" stroke="#DED6CB"/>
+  <text x="228" y="94" fill="#6E675C" font-family="Inter, Arial, sans-serif" font-size="18">superlinear.academy/c/news/ai</text>
+  <rect x="86" y="158" width="650" height="462" rx="18" fill="#FFFFFF" stroke="#E5E0D8"/>
+  <text x="126" y="214" fill="#1E222A" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800">AI 编程的下一个变化</text>
+  <text x="126" y="268" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="24">你大概这样用 AI 写代码：打开 Cursor 或 Claude Code，描述你要什么...</text>
+  <text x="126" y="318" fill="#334155" font-family="Inter, Arial, sans-serif" font-size="24">但真正难的不是“工具怎么用”，而是你是否理解 agent 背后的前置知识。</text>
+  <rect x="548" y="288" width="92" height="38" rx="8" fill="#D8E7FF"/>
+  <text x="565" y="315" fill="#1E3A5F" font-family="Inter, Arial, sans-serif" font-size="24">agent</text>
+  <rect x="502" y="342" width="168" height="48" rx="24" fill="#26392F"/>
+  <text x="548" y="373" fill="#FFFAF0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="750">探索</text>
+  <rect x="774" y="126" width="336" height="494" rx="20" fill="#FBF8F1" stroke="#E1D8C8" stroke-width="2"/>
+  <text x="806" y="178" fill="#1D1A15" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="850">LinkLog</text>
+  <text x="806" y="206" fill="#746A5B" font-family="Inter, Arial, sans-serif" font-size="16">Hosted Trial · no API key needed</text>
+  <line x1="806" y1="236" x2="1078" y2="236" stroke="#E1D8C8" stroke-width="2"/>
+  <text x="806" y="272" fill="#7B6F60" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800">SELECTED CONCEPT</text>
+  <text x="806" y="320" fill="#1D1A15" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="850">agent</text>
+  <text x="806" y="354" fill="#665F53" font-family="Inter, Arial, sans-serif" font-size="20">Map the hidden assumptions before you keep reading.</text>
+  <rect x="806" y="390" width="272" height="70" rx="12" fill="#FFFDF7" stroke="#E3DAC9"/>
+  <text x="830" y="433" fill="#2F3F35" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="850">4</text>
+  <text x="862" y="433" fill="#7B6F60" font-family="Inter, Arial, sans-serif" font-size="17">unknowns</text>
+  <line x1="944" y1="402" x2="944" y2="448" stroke="#E3DAC9"/>
+  <text x="970" y="433" fill="#2F3F35" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="850">0</text>
+  <text x="1002" y="433" fill="#7B6F60" font-family="Inter, Arial, sans-serif" font-size="17">known</text>
+  <text x="806" y="504" fill="#2C2923" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800">Knowledge compass</text>
+  <circle cx="828" cy="554" r="11" fill="#26392F"/>
+  <line x1="828" y1="572" x2="828" y2="640" stroke="#D6CBB9" stroke-width="2"/>
+  <rect x="852" y="532" width="226" height="46" rx="10" fill="#FFFAF0" stroke="#CDBF9E" stroke-width="2"/>
+  <text x="881" y="562" fill="#2B2822" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="750">LLM</text>
+  <rect x="852" y="592" width="226" height="46" rx="10" fill="#FFFAF0" stroke="#CDBF9E" stroke-width="2"/>
+  <text x="881" y="622" fill="#2B2822" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="750">Prompt Engineering</text>
+  <path d="M721 364 C745 364 748 340 774 340" stroke="#26392F" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="721" cy="364" r="6" fill="#26392F"/>
+</svg>
