@@ -67,6 +67,34 @@ function SidePanel() {
     const next = language === "en" ? "zh" : "en"
     setLanguage(next)
     chrome.storage.local.set({ uiLanguage: next })
+    trackUiEvent("language_changed", { language: next, status: next })
+  }
+
+  function trackUiEvent(
+    event: string,
+    extra: {
+      language?: UiLanguage
+      concept?: string
+      nodeCount?: number
+      childCount?: number
+      status?: string
+      errorCode?: string
+      pageUrl?: string
+    } = {}
+  ) {
+    chrome.runtime
+      .sendMessage({
+        action: "analytics-track",
+        event,
+        language: extra.language || language,
+        concept: extra.concept || concept,
+        nodeCount: extra.nodeCount,
+        childCount: extra.childCount,
+        status: extra.status,
+        errorCode: extra.errorCode,
+        pageUrl: extra.pageUrl
+      })
+      .catch(() => {})
   }
 
   function getLoadingText(text: string) {
@@ -155,6 +183,10 @@ function SidePanel() {
     try {
       await navigator.clipboard.writeText(mermaid)
       showToast(getCopy("copied"))
+      trackUiEvent("mermaid_copied", {
+        nodeCount: nodes.length,
+        status: "succeeded"
+      })
     } catch {
       try {
         const textarea = document.createElement("textarea")
@@ -166,8 +198,16 @@ function SidePanel() {
         document.execCommand("copy")
         textarea.remove()
         showToast(getCopy("copied"))
+        trackUiEvent("mermaid_copied", {
+          nodeCount: nodes.length,
+          status: "succeeded"
+        })
       } catch {
         showToast(getCopy("copyFailed"))
+        trackUiEvent("mermaid_copy_failed", {
+          nodeCount: nodes.length,
+          status: "failed"
+        })
       }
     }
   }
@@ -181,6 +221,11 @@ function SidePanel() {
     setLoading(false)
     setError(null)
     setActiveTab("map")
+    trackUiEvent("history_item_opened", {
+      concept: graph.concept,
+      nodeCount: graph.nodes.length,
+      pageUrl: graph.sourceUrl
+    })
   }
 
   useEffect(() => {
@@ -350,6 +395,12 @@ function SidePanel() {
         language
       })
       if (result?.success) {
+        const childCount = (result.children || []).length
+        trackUiEvent("prerequisites_requested", {
+          concept: nodeLabel,
+          childCount,
+          status: childCount > 0 ? "found" : "none"
+        })
         setNodes((prev) => {
           const updated = prev.map((n) =>
             n.id === nodeId ? { ...n, expanded: true } : n
@@ -404,6 +455,11 @@ function SidePanel() {
           ]
         })
       } else {
+        trackUiEvent("prerequisites_failed", {
+          concept: nodeLabel,
+          status: "failed",
+          errorCode: result?.error || "failed"
+        })
         setNodes((prev) =>
           prev.map((n) =>
             n.id === nodeId
@@ -422,6 +478,11 @@ function SidePanel() {
         setError(getErrorText(result?.error || "Failed to expand node"))
       }
     } catch (err: any) {
+      trackUiEvent("prerequisites_failed", {
+        concept: nodeLabel,
+        status: "failed",
+        errorCode: err.message || "failed"
+      })
       setNodes((prev) =>
         prev.map((n) =>
           n.id === nodeId
@@ -488,6 +549,10 @@ function SidePanel() {
         action: "remove-known",
         label: nodeLabel
       })
+      trackUiEvent("known_unmarked", {
+        concept: nodeLabel,
+        status: "unmarked"
+      })
       setNodes((prev) =>
         prev.map((n) =>
           n.label === nodeLabel ? { ...n, status: "unexplored" as const } : n
@@ -500,6 +565,10 @@ function SidePanel() {
         label: nodeLabel
       })
       if (!knownResult?.success) return
+      trackUiEvent("known_marked", {
+        concept: nodeLabel,
+        status: "marked"
+      })
       setNodes((prev) =>
         prev.map((n) =>
           n.label === nodeLabel ? { ...n, status: "mastered" as const } : n

@@ -24,10 +24,14 @@ import type {
   GenerateGraphRequest,
   ExpandNodeRequest,
   RefreshNodeRequest,
+  AnalyticsTrackRequest,
   UiLanguage
 } from "~types"
 
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+
+const ANALYTICS_STORAGE_KEY = "analyticsInstallId"
+const ANALYTICS_ENDPOINT_PATH = "/analytics"
 
 chrome.action.onClicked.addListener((tab) => {
   if (tab.id) {
@@ -109,6 +113,79 @@ async function getPageContentFromTab(tabId: number) {
   }
 }
 
+function isHostedLinkLogBackend(baseUrl: string) {
+  return /^https:\/\/linklog-api\./.test(baseUrl)
+}
+
+function getErrorCode(message = "") {
+  if (!message) return "unknown"
+  if (message.includes("429")) return "rate_limit"
+  if (message.includes("401") || message.includes("403")) return "auth"
+  if (message.includes("LLM request failed")) return "llm_request_failed"
+  if (message.includes("JSON")) return "parse_error"
+  if (message.includes("stream")) return "stream_error"
+  return message.slice(0, 80)
+}
+
+async function getAnalyticsInstallId() {
+  const existing = await chrome.storage.local.get(ANALYTICS_STORAGE_KEY)
+  if (existing[ANALYTICS_STORAGE_KEY]) return existing[ANALYTICS_STORAGE_KEY]
+
+  const id =
+    typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  await chrome.storage.local.set({ [ANALYTICS_STORAGE_KEY]: id })
+  return id
+}
+
+async function sha256Hex(value: string) {
+  if (!value) return ""
+  const bytes = new TextEncoder().encode(value)
+  const digest = await crypto.subtle.digest("SHA-256", bytes)
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("")
+}
+
+function getPageHost(pageUrl?: string) {
+  try {
+    if (!pageUrl) return ""
+    return new URL(pageUrl).hostname
+  } catch {
+    return ""
+  }
+}
+
+async function trackAnalytics(input: Omit<AnalyticsTrackRequest, "action">) {
+  try {
+    const baseUrl = await getApiBaseUrl()
+    if (!isHostedLinkLogBackend(baseUrl)) return
+
+    const installId = await getAnalyticsInstallId()
+    const concept = input.concept || ""
+    await fetch(`${baseUrl}${ANALYTICS_ENDPOINT_PATH}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: input.event,
+        language: input.language || "en",
+        extensionVersion: chrome.runtime.getManifest().version,
+        installId,
+        conceptHash: await sha256Hex(concept.trim().toLowerCase()),
+        conceptLength: concept.length,
+        nodeCount: input.nodeCount || 0,
+        childCount: input.childCount || 0,
+        status: input.status || "",
+        errorCode: input.errorCode || "",
+        pageHost: getPageHost(input.pageUrl)
+      })
+    }).catch(() => {})
+  } catch {
+    // Analytics should never block LinkLog.
+  }
+}
+
 async function startSelectionGeneration(data: {
   selectedText: string
   pageContent: string
@@ -118,6 +195,12 @@ async function startSelectionGeneration(data: {
   language?: UiLanguage
 }) {
   await chrome.storage.local.set({ _pendingGeneration: data })
+  trackAnalytics({
+    event: "selection_explore_clicked",
+    language: data.language || "en",
+    concept: data.selectedText,
+    pageUrl: data.pageUrl
+  })
 
   const generationRequest = {
     action: "generate-graph",
@@ -420,6 +503,13 @@ chrome.runtime.onMessage.addListener(
       return true
     }
 
+    if (message.action === "analytics-track") {
+      trackAnalytics(message as AnalyticsTrackRequest)
+        .then(() => sendResponse({ success: true }))
+        .catch(() => sendResponse({ success: true }))
+      return true
+    }
+
     if (message.action === "get-learning-summary") {
       getLearningSummary()
         .then((summary) => sendResponse({ success: true, summary }))
@@ -456,6 +546,13 @@ async function handleGenerate(req: GenerateGraphRequest, generationId: number) {
   await clearStreamBuffer()
 
   const language = req.language || "en"
+  trackAnalytics({
+    event: "map_generation_started",
+    language,
+    concept: req.selectedText,
+    pageUrl: req.pageUrl
+  })
+
   const graphKey = `${req.pageUrl}::${language}::${req.selectedText}`
   const cachedGraph = await getGraph(graphKey)
   if (cachedGraph) {
@@ -464,6 +561,14 @@ async function handleGenerate(req: GenerateGraphRequest, generationId: number) {
       nodes: cachedGraph.nodes,
       edges: cachedGraph.edges,
       generationId
+    })
+    trackAnalytics({
+      event: "map_generation_cached",
+      language,
+      concept: req.selectedText,
+      nodeCount: cachedGraph.nodes.length,
+      status: "cached",
+      pageUrl: req.pageUrl
     })
     return { success: true, cached: true }
   }
@@ -523,6 +628,14 @@ async function handleGenerate(req: GenerateGraphRequest, generationId: number) {
 
     await saveStreamBuffer({ status: "done", nodes: allNodes, edges: allEdges, generationId })
     await updateDailyStats(nodes.length, 0)
+    trackAnalytics({
+      event: "map_generation_succeeded",
+      language,
+      concept: req.selectedText,
+      nodeCount: allNodes.length,
+      status: "succeeded",
+      pageUrl: req.pageUrl
+    })
 
     return { success: true }
   } catch (err: any) {
@@ -532,6 +645,14 @@ async function handleGenerate(req: GenerateGraphRequest, generationId: number) {
       edges: [],
       error: err.message,
       generationId
+    })
+    trackAnalytics({
+      event: "map_generation_failed",
+      language,
+      concept: req.selectedText,
+      status: "failed",
+      errorCode: getErrorCode(err.message),
+      pageUrl: req.pageUrl
     })
     return { success: false, error: err.message }
   }

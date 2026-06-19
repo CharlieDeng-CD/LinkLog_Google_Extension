@@ -7,6 +7,10 @@ compatibility_date = "2026-06-19"
 # binding = "LINKLOG_RATE_LIMIT_KV"
 # id = "your-kv-namespace-id"
 
+# Optional: bind a KV namespace for anonymous product analytics.
+# [[kv_namespaces]]
+# binding = "LINKLOG_ANALYTICS_KV"
+# id = "your-analytics-kv-namespace-id"
+
 [vars]
 LINKLOG_HOURLY_LIMIT = "60"
-

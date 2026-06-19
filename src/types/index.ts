@@ -52,6 +52,7 @@ export type MessageAction =
   | "generate-graph"
   | "expand-node"
   | "refresh-node"
+  | "analytics-track"
   | "set-api-key"
   | "get-api-key"
   | "add-known"
@@ -85,6 +86,18 @@ export interface RefreshNodeRequest {
   language?: UiLanguage
 }
 
+export interface AnalyticsTrackRequest {
+  action: "analytics-track"
+  event: string
+  language?: UiLanguage
+  concept?: string
+  nodeCount?: number
+  childCount?: number
+  status?: string
+  errorCode?: string
+  pageUrl?: string
+}
+
 export interface SetApiKeyRequest {
   action: "set-api-key"
   apiKey: string
@@ -98,6 +111,7 @@ export type MessageRequest =
   | GenerateGraphRequest
   | ExpandNodeRequest
   | RefreshNodeRequest
+  | AnalyticsTrackRequest
   | SetApiKeyRequest
   | GetApiKeyRequest
 

@@ -2,5 +2,11 @@ name = "linklog-api"
 main = "worker.js"
 compatibility_date = "2026-06-19"
 
+# Create and bind this KV namespace to persist anonymous analytics:
+# npx wrangler kv namespace create LINKLOG_ANALYTICS_KV
+# [[kv_namespaces]]
+# binding = "LINKLOG_ANALYTICS_KV"
+# id = "your-analytics-kv-namespace-id"
+
 [vars]
 LINKLOG_HOURLY_LIMIT = "60"
