@@ -5,6 +5,7 @@
   "description": "AI Knowledge Graph Browser — select any concept and explore its prerequisites through an interactive knowledge graph.",
   "scripts": {
     "dev": "plasmo dev",
+    "generate:icons": "node scripts/generate-icons.js",
     "typecheck": "tsc --noEmit",
     "build": "plasmo build",
     "verify:bundle": "node scripts/verify-extension-bundle.js",
