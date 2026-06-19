@@ -4,9 +4,9 @@ compatibility_date = "2026-06-19"
 
 # Create and bind this KV namespace to persist anonymous analytics:
 # npx wrangler kv namespace create LINKLOG_ANALYTICS_KV
-# [[kv_namespaces]]
-# binding = "LINKLOG_ANALYTICS_KV"
-# id = "your-analytics-kv-namespace-id"
+[[kv_namespaces]]
+binding = "LINKLOG_ANALYTICS_KV"
+id = "c7e5cd8a892b4649b0f4cba17160ee7e"
 
 [vars]
 LINKLOG_HOURLY_LIMIT = "60"
