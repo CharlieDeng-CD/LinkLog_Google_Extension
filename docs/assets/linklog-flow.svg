@@ -1,27 +1,32 @@
-<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="420" rx="28" fill="#26392F"/>
-  <text x="72" y="82" fill="#FFFAF0" font-family="Inter, Arial, sans-serif" font-size="38" font-weight="850">From confusing concept to prerequisite map</text>
-  <text x="72" y="122" fill="#D9E5DA" font-family="Inter, Arial, sans-serif" font-size="20">LinkLog turns the missing context behind a selected phrase into a reading path.</text>
-  <g transform="translate(72 174)">
-    <rect width="270" height="150" rx="18" fill="#FBF8F1"/>
-    <text x="28" y="46" fill="#9B4A32" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="850">1. Highlight</text>
-    <text x="28" y="86" fill="#1D1A15" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="850">“agent”</text>
-    <text x="28" y="119" fill="#665F53" font-family="Inter, Arial, sans-serif" font-size="17">Select a term while reading.</text>
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="360" rx="28" fill="#26392F"/>
+  <text x="70" y="72" fill="#FFFAF0" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="850">A smaller loop for deeper reading</text>
+  <text x="70" y="112" fill="#D9E5DA" font-family="Inter, Arial, sans-serif" font-size="19">Select a confusing concept, reveal its prerequisites, then keep reading with context.</text>
+
+  <g transform="translate(72 162)">
+    <rect width="280" height="124" rx="18" fill="#FBF8F1"/>
+    <text x="28" y="42" fill="#9B4A32" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="850">1. Highlight</text>
+    <text x="28" y="78" fill="#1D1A15" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="850">Pick a concept</text>
+    <text x="28" y="105" fill="#665F53" font-family="Inter, Arial, sans-serif" font-size="16">agent, RAG, vector DB...</text>
   </g>
-  <path d="M372 249 H448" stroke="#D9E5DA" stroke-width="4" stroke-linecap="round"/>
-  <path d="M436 235 L450 249 L436 263" stroke="#D9E5DA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <g transform="translate(478 174)">
-    <rect width="270" height="150" rx="18" fill="#FBF8F1"/>
-    <text x="28" y="46" fill="#9B4A32" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="850">2. Map</text>
-    <text x="28" y="86" fill="#1D1A15" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="850">Hidden assumptions</text>
-    <text x="28" y="119" fill="#665F53" font-family="Inter, Arial, sans-serif" font-size="17">LLM, prompt, workflow...</text>
+
+  <path d="M386 224 H456" stroke="#D9E5DA" stroke-width="4" stroke-linecap="round"/>
+  <path d="M444 211 L458 224 L444 237" stroke="#D9E5DA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g transform="translate(492 162)">
+    <rect width="280" height="124" rx="18" fill="#FBF8F1"/>
+    <text x="28" y="42" fill="#9B4A32" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="850">2. Map</text>
+    <text x="28" y="78" fill="#1D1A15" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="850">See prerequisites</text>
+    <text x="28" y="105" fill="#665F53" font-family="Inter, Arial, sans-serif" font-size="16">What the article assumes.</text>
   </g>
-  <path d="M778 249 H854" stroke="#D9E5DA" stroke-width="4" stroke-linecap="round"/>
-  <path d="M842 235 L856 249 L842 263" stroke="#D9E5DA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <g transform="translate(884 174)">
-    <rect width="270" height="150" rx="18" fill="#FBF8F1"/>
-    <text x="28" y="46" fill="#9B4A32" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="850">3. Keep reading</text>
-    <text x="28" y="86" fill="#1D1A15" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="850">With context</text>
-    <text x="28" y="119" fill="#665F53" font-family="Inter, Arial, sans-serif" font-size="17">Know what to learn next.</text>
+
+  <path d="M806 224 H876" stroke="#D9E5DA" stroke-width="4" stroke-linecap="round"/>
+  <path d="M864 211 L878 224 L864 237" stroke="#D9E5DA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g transform="translate(912 162)">
+    <rect width="216" height="124" rx="18" fill="#FBF8F1"/>
+    <text x="28" y="42" fill="#9B4A32" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="850">3. Continue</text>
+    <text x="28" y="78" fill="#1D1A15" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="850">Read better</text>
+    <text x="28" y="105" fill="#665F53" font-family="Inter, Arial, sans-serif" font-size="16">With missing context.</text>
   </g>
 </svg>
