@@ -32,6 +32,7 @@ chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
 
 const ANALYTICS_STORAGE_KEY = "analyticsInstallId"
 const ANALYTICS_ENDPOINT_PATH = "/analytics"
+const LLM_CONNECT_TIMEOUT_MS = 25000
 
 chrome.action.onClicked.addListener((tab) => {
   if (tab.id) {
@@ -334,6 +335,39 @@ async function getModel(): Promise<string> {
   return "gpt-4o-mini"
 }
 
+async function fetchWithConnectTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs = LLM_CONNECT_TIMEOUT_MS
+) {
+  const controller = new AbortController()
+  const timeout = globalThis.setTimeout(() => controller.abort(), timeoutMs)
+
+  try {
+    return await fetch(url, {
+      ...init,
+      signal: controller.signal
+    })
+  } catch (err: any) {
+    if (err?.name === "AbortError") {
+      throw new Error(
+        "LinkLog backend connection timed out. Please check whether this network can access the LinkLog API."
+      )
+    }
+    if (
+      err?.message?.includes("Failed to fetch") ||
+      err?.message?.includes("NetworkError")
+    ) {
+      throw new Error(
+        "Cannot reach the LinkLog backend from this network. Please try another network or contact LinkLog support."
+      )
+    }
+    throw err
+  } finally {
+    globalThis.clearTimeout(timeout)
+  }
+}
+
 async function streamAndParse(
   messages: Array<{ role: "system" | "user" | "assistant"; content: string }>,
   generationId?: number
@@ -347,7 +381,7 @@ async function streamAndParse(
     headers.Authorization = `Bearer ${apiKey}`
   }
 
-  const response = await fetch(`${baseURL}/chat/completions`, {
+  const response = await fetchWithConnectTimeout(`${baseURL}/chat/completions`, {
     method: "POST",
     headers,
     body: JSON.stringify({

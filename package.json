@@ -1,7 +1,7 @@
 {
   "name": "linklog",
   "displayName": "LinkLog",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "AI Knowledge Graph Browser — select any concept and explore its prerequisites through an interactive knowledge graph.",
   "scripts": {
     "dev": "plasmo dev",

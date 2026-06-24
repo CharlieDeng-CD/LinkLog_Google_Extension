@@ -113,6 +113,12 @@ function SidePanel() {
     if (language === "en") return text
     if (text === "Failed to generate graph") return "知识地图生成失败"
     if (text === "Failed to expand node") return "前置知识展开失败"
+    if (
+      text.includes("Cannot reach the LinkLog backend") ||
+      text.includes("backend connection timed out")
+    ) {
+      return "当前网络无法连接 LinkLog 后端。请换一个网络，或稍后再试。"
+    }
     if (text.includes("API Key not configured")) {
       return "尚未配置 API Key。请在设置中填写，或使用 Hosted Trial。"
     }
